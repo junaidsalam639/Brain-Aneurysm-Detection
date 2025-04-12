@@ -1,5 +1,5 @@
 import { useState, useRef } from "react"
-import { Upload, X, Check, ImageIcon } from "lucide-react"
+import { Upload, X, Check } from "lucide-react"
 import { Card, CardContent } from "../ui/Card"
 import { Button } from "../ui/Button"
 
