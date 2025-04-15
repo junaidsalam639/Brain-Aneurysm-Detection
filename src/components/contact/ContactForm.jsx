@@ -14,7 +14,7 @@ export default function ContactForm() {
                 Contact Us
               </h1>
               <p className="max-w-[700px] text-gray-700 md:text-xl animate-fadeIn animation-delay-200">
-                Have questions about our brain aneurysm detection system? Get in touch with our team.
+                Have questions about our Lilia-AI system? Get in touch with our team.
               </p>
             </div>
           </div>

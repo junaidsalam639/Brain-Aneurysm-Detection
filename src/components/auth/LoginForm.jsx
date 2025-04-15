@@ -1,22 +1,51 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import Cookies from 'js-cookie'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/Card";
 import { Input } from "../ui/Input";
 import { Button } from "../ui/Button";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useState } from "react";
+import { Loader } from "lucide-react";
+import { toast } from "sonner";
+import { basedUrl } from "../../libs/basedUrl";
 
 export default function LoginForm() {
+  const [loadingBtn, setBtnLoading] = useState(false);
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
-      email: "",
+      username: "",
       password: "",
     },
     validationSchema: Yup.object({
-      email: Yup.string().email("Invalid email address").required("Email is required"),
+      username: Yup.string().required("username is required"),
       password: Yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
     }),
-    onSubmit: (values) => {
-      console.log("Form Values:", values);
+    onSubmit: async (values) => {
+      try {
+        setBtnLoading(true);
+        const formData = new FormData();
+        formData.append("username", values.username);
+        formData.append("password", values.password);
+        const response = await fetch(`${basedUrl}login`, {
+          method: "POST",
+          body: formData,
+        });
+        const data = await response.json();
+        if (response.ok) {
+          Cookies.set('token', data?.token, { expires: 7 })
+          toast.success(data?.message || "Login Successfully");
+          navigate("/");
+        } else {
+          toast.error(data?.error || "Login failed");
+        }
+        setBtnLoading(false);
+      } catch (err) {
+        console.error("Signup Error:", err);
+        toast.error("Something went wrong");
+        setBtnLoading(false);
+      }
     },
   });
 
@@ -27,25 +56,25 @@ export default function LoginForm() {
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl font-bold text-center text-red-600">Login to Your Account</CardTitle>
             <CardDescription className="text-center">
-              Enter your email and password to access your account
+              Enter your username and password to access your account
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium text-gray-700">
-                Email
+              <label htmlFor="username" className="text-sm font-medium text-gray-700">
+                Username
               </label>
               <Input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="john.doe@example.com"
-                value={formik.values.email}
+                id="username"
+                name="username"
+                type="text"
+                placeholder="Enter your username"
+                value={formik.values.username}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
-              {formik.touched.email && formik.errors.email && (
-                <p className="text-sm text-red-600">{formik.errors.email}</p>
+              {formik.touched.username && formik.errors.username && (
+                <p className="text-sm text-red-600">{formik.errors.username}</p>
               )}
             </div>
             <div className="space-y-2">
@@ -69,8 +98,11 @@ export default function LoginForm() {
                 <p className="text-sm text-red-600">{formik.errors.password}</p>
               )}
             </div>
-            <Button type="submit" className="w-full bg-red-600 hover:bg-red-700">
-              Sign In
+            <Button
+              type="submit"
+              disabled={loadingBtn}
+              className="w-full bg-red-600 hover:bg-red-700">
+              {loadingBtn && <Loader className="animate-spin w-5 h-5" />} Sign In
             </Button>
           </CardContent>
         </form>

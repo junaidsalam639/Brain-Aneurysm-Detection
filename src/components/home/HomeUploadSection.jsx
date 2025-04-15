@@ -9,11 +9,11 @@ export default function HomeUploadSection() {
                         <div className="space-y-2">
                             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl text-red-600">Upload Your Scan</h2>
                             <p className="max-w-[700px] text-gray-700 md:text-xl">
-                                Upload your brain scan image for instant analysis. Our system will process your image and provide
+                                Upload your Brain CT for instant analysis. Our system will process your CT and provide
                                 preliminary results.
                             </p>
                         </div>
-                        <div className="w-full max-w-md mx-auto">
+                        <div className="w-full container mx-auto md:px-20">
                             <ImageUploaderCustom />
                         </div>
                     </div>

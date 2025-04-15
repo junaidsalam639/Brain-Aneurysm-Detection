@@ -19,7 +19,7 @@ export default function Footer() {
                         <path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z" />
                     </svg>
                     <p className="text-center text-sm leading-loose text-gray-600 md:text-left">
-                        &copy; {new Date().getFullYear()} Brain Aneurysm Detection. All rights reserved.
+                        &copy; {new Date().getFullYear()} Lilia-AI. All rights reserved.
                     </p>
                 </div>
                 <div className="flex gap-4">

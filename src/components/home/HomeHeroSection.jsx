@@ -14,18 +14,18 @@ export default function HomeHeroSection() {
                                 Medical Imaging Analysis
                             </div>
                             <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-red-600">
-                                Brain Aneurysm Detection
+                                Brain Aneurysms Detection
                             </h1>
                             <p className="text-gray-700 md:text-xl">
                                 Early detection saves lives. Our advanced AI system helps identify potential brain aneurysms from
                                 medical imaging with high accuracy.
                             </p>
                             <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                                <a href="#upload-section">
+                                <Link to="/login">
                                     <Button className="bg-red-600 hover:bg-red-700 md:w-40 w-full">
-                                        Upload Image <ArrowRight className="ml-2 h-4 w-4" />
+                                        Upload File <ArrowRight className="ml-2 h-4 w-4" />
                                     </Button>
-                                </a>
+                                </Link>
                                 <Link to="/contact">
                                     <Button variant="outline" className="md:w-40 w-full border-red-600 text-red-600 hover:bg-red-50">
                                         Contact Us

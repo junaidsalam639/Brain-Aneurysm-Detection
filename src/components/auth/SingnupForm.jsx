@@ -1,24 +1,30 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/Card";
 import { Input } from "../ui/Input";
 import { Checkbox } from "../ui/Checkbox";
 import { Button } from "../ui/Button";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { basedUrl } from "../../libs/basedUrl";
+import { useState } from "react";
+import { toast } from "sonner";
+import { Loader } from "lucide-react";
 
 export default function SignupForm() {
+
+  const [loadingBtn, setBtnLoading] = useState(false);
+  const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: {
-      firstName: "",
-      lastName: "",
+      username: "",
       email: "",
       password: "",
       confirmPassword: "",
       terms: false,
     },
     validationSchema: Yup.object({
-      firstName: Yup.string().required("First name is required"),
-      lastName: Yup.string().required("Last name is required"),
+      username: Yup.string().required("username is required"),
       email: Yup.string().email("Invalid email address").required("Email is required"),
       password: Yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
       confirmPassword: Yup.string()
@@ -26,8 +32,30 @@ export default function SignupForm() {
         .required("Confirm password is required"),
       terms: Yup.boolean().oneOf([true], "You must accept the terms and conditions"),
     }),
-    onSubmit: (values) => {
-      console.log("Form Values:", values);
+    onSubmit: async (values) => {
+      try {
+        setBtnLoading(true);
+        const formData = new FormData();
+        formData.append("username", values?.username);
+        formData.append("email", values.email);
+        formData.append("password", values.password);
+        const response = await fetch(`${basedUrl}signup`, {
+          method: "POST",
+          body: formData,
+        });
+        const data = await response.json();
+        if (response?.ok) {
+          toast.success(data?.message || "Signup Successfully");
+          navigate("/login");
+        } else {
+          toast.error(data?.error || "Signup failed");
+        }
+        setBtnLoading(false);
+      } catch (err) {
+        console.error("Signup Error:", err);
+        toast.error("Something went wrong");
+        setBtnLoading(false);
+      }
     },
   });
 
@@ -40,39 +68,22 @@ export default function SignupForm() {
             <CardDescription className="text-center">Enter your information to create an account</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <label htmlFor="firstName" className="text-sm font-medium text-gray-700">
-                  First name
-                </label>
-                <Input
-                  id="firstName"
-                  name="firstName"
-                  placeholder="John"
-                  value={formik.values.firstName}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                {formik.touched.firstName && formik.errors.firstName && (
-                  <p className="text-sm text-red-600">{formik.errors.firstName}</p>
-                )}
-              </div>
-              <div className="space-y-2">
-                <label htmlFor="lastName" className="text-sm font-medium text-gray-700">
-                  Last name
-                </label>
-                <Input
-                  id="lastName"
-                  name="lastName"
-                  placeholder="Doe"
-                  value={formik.values.lastName}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                {formik.touched.lastName && formik.errors.lastName && (
-                  <p className="text-sm text-red-600">{formik.errors.lastName}</p>
-                )}
-              </div>
+            <div className="space-y-2">
+              <label htmlFor="username" className="text-sm font-medium text-gray-700">
+                Username
+              </label>
+              <Input
+                id="username"
+                name="username"
+                type="text"
+                placeholder="Enter your username"
+                value={formik.values.username}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
+              {formik.touched.username && formik.errors.username && (
+                <p className="text-sm text-red-600">{formik.errors.username}</p>
+              )}
             </div>
             <div className="space-y-2">
               <label htmlFor="email" className="text-sm font-medium text-gray-700">
@@ -148,8 +159,12 @@ export default function SignupForm() {
             {formik.touched.terms && formik.errors.terms && (
               <p className="text-sm text-red-600">{formik.errors.terms}</p>
             )}
-            <Button type="submit" className="w-full bg-red-600 hover:bg-red-700">
-              Create Account
+            <Button
+              type="submit"
+              disabled={loadingBtn}
+              className="w-full bg-red-600 hover:bg-red-700 text-white flex items-center justify-center gap-2 py-3 rounded-md transition duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
+            >
+              {loadingBtn && <Loader className="animate-spin w-5 h-5" />} Create Account
             </Button>
           </CardContent>
         </form>
