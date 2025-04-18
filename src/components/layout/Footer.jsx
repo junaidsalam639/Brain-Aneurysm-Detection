@@ -23,13 +23,10 @@ export default function Footer() {
                     </p>
                 </div>
                 <div className="flex gap-4">
-                    <Link href="/terms" className="text-sm font-medium text-gray-600 transition-colors hover:text-red-600">
-                        Terms of Service
+                    <Link to="/" className="text-sm font-medium text-gray-600 transition-colors hover:text-red-600">
+                        Home
                     </Link>
-                    <Link href="/privacy" className="text-sm font-medium text-gray-600 transition-colors hover:text-red-600">
-                        Privacy Policy
-                    </Link>
-                    <Link href="/contact" className="text-sm font-medium text-gray-600 transition-colors hover:text-red-600">
+                    <Link to="/contact" className="text-sm font-medium text-gray-600 transition-colors hover:text-red-600">
                         Contact
                     </Link>
                 </div>

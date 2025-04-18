@@ -162,7 +162,7 @@ const ChunkUpload = () => {
     const fileInputRef = useRef(null);
     const token = Cookies.get("token");
 
-    const [selectedFile, setSelectedFile] = useState(null);
+    const [selectedFile, setSelectedFile] = useState('');
     const [isUploading, setIsUploading] = useState(false);
     const [dragActive, setDragActive] = useState(false);
 
@@ -250,52 +250,65 @@ const ChunkUpload = () => {
                     className="hidden"
                     onChange={handleFileChange}
                 />
-
-                <div
-                    onClick={handleUploadClick}
-                    onDrop={handleDrop}
-                    onDragOver={(e) => {
-                        e.preventDefault();
-                        setDragActive(true);
-                    }}
-                    onDragLeave={() => setDragActive(false)}
-                    className={`border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center transition-colors cursor-pointer ${isUploading
-                        ? "border-red-500 bg-red-50"
-                        : dragActive
-                            ? "border-red-600 bg-red-100"
-                            : "border-gray-300"
-                        }`}
-                >
-                    <Upload className="h-10 w-10 text-red-500 mb-2 animate-bounce" />
-                    <p className="text-sm text-gray-600 mb-2 text-center">
-                        Drag & drop your CT file here, or click to select
-                    </p>
-                    <Button
-                        className="bg-red-600 hover:bg-red-700"
-                        type="button"
-                        disabled={isUploading}
-                    >
-                        <Upload className="mr-2 h-4 w-4" />
-                        Upload File
-                    </Button>
-                </div>
-
-                <div className="space-y-4 mt-4 w-full">
-                    <div className="flex gap-2 justify-center">
-                        <Button
-                            className="bg-red-600 hover:bg-red-700 w-full"
-                            onClick={handleSubmit}
-                            disabled={!selectedFile || isUploading}
+                {!selectedFile ? (
+                    <>
+                        <div
+                            onClick={handleUploadClick}
+                            onDrop={handleDrop}
+                            onDragOver={(e) => {
+                                e.preventDefault();
+                                setDragActive(true);
+                            }}
+                            onDragLeave={() => setDragActive(false)}
+                            className={`border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center transition-colors cursor-pointer ${isUploading
+                                ? "border-red-500 bg-red-50"
+                                : dragActive
+                                    ? "border-red-600 bg-red-100"
+                                    : "border-gray-300"
+                                }`}
                         >
-                            {isUploading ? (
-                                <Loader className="animate-spin w-5 h-5" />
-                            ) : (
-                                "Submit for Upload"
-                            )}
-                        </Button>
-                    </div>
-                </div>
-            </div>
+                            <Upload className="h-10 w-10 text-red-500 mb-2 animate-bounce" />
+                            <p className="text-sm text-gray-600 mb-2 text-center">
+                                Drag & drop your CT file here, or click to select
+                            </p>
+                            <Button
+                                className="bg-red-600 hover:bg-red-700"
+                                type="button"
+                                disabled={isUploading}
+                            >
+                                <Upload className="mr-2 h-4 w-4" />
+                                Upload File
+                            </Button>
+                        </div>
+
+                    </>
+                ) : (
+                    <>
+                        < div className="space-y-4 mt-4 w-full">
+                            <div className="flex gap-2 justify-center">
+                                <Button
+                                    className="bg-red-600 hover:bg-red-700 w-full"
+                                    onClick={handleSubmit}
+                                    disabled={!selectedFile || isUploading}
+                                >
+                                    {isUploading ? (
+                                        <Loader className="animate-spin w-5 h-5" />
+                                    ) : (
+                                        "Submit for Upload"
+                                    )}
+                                </Button>
+                                <Button
+                                    onClick={() => setSelectedFile('')}
+                                    disabled={!selectedFile || isUploading}
+                                    variant="outline"
+                                    className="border-red-600 text-red-600 hover:bg-red-50 w-full">
+                                    Cancel
+                                </Button>
+                            </div>
+                        </div>
+                    </>
+                )}
+            </div >
             {predictData && <ResultSection predictData={predictData} setPredictData={setPredictData} />}
         </>
     );

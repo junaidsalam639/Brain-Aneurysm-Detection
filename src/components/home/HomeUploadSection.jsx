@@ -3,7 +3,7 @@ import ImageUploaderCustom from "../uploadImage/ImageUploaderCustom";
 export default function HomeUploadSection() {
     return (
         <>
-            <section id="upload-section" className="w-full py-12 md:py-24 bg-gray-50">
+            <section id="upload-section" className="w-full py-12 md:py-24 bg-gray-50 min-h-screen">
                 <div className="container px-4 md:px-6">
                     <div className="flex flex-col items-center justify-center space-y-4 text-center">
                         <div className="space-y-2">
