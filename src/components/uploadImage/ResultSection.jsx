@@ -9,27 +9,37 @@ export default function ResultSection({ predictData }) {
     const [showImages, setShowImages] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
     const [displayedText, setDisplayedText] = useState("");
+    const [isAnimationComplete, setIsAnimationComplete] = useState(false);
 
     const handleRadioClick = () => {
-        setShowText(true);
+        setShowText(!showText);
         setDisplayedText("");
     };
 
     const handleShowImages = () => {
-        setShowImages(true);
+        setShowImages(!showImages);
     };
 
+    const rawHtml = predictData?.report || "";
+    const cleanedHtml = rawHtml?.replace(/^```html\s*/i, "")?.replace(/```$/i, "");
+
     useEffect(() => {
-        if (showText && predictData?.report) {
+        if (showText && cleanedHtml) {
             let index = 0;
+            let tempText = '';
             const interval = setInterval(() => {
-                setDisplayedText((prev) => prev + predictData?.report?.charAt(index));
+                tempText += cleanedHtml.charAt(index);
+                setDisplayedText(tempText);
                 index++;
-                if (index === predictData?.report?.length) clearInterval(interval);
+                if (index === cleanedHtml?.length) {
+                    clearInterval(interval);
+                    setIsAnimationComplete(true);
+                }
             }, 10);
             return () => clearInterval(interval);
         }
-    }, [showText, predictData?.report]);
+    }, [showText, cleanedHtml]);
+
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
@@ -38,39 +48,46 @@ export default function ResultSection({ predictData }) {
 
             <div>
                 <Button className="bg-red-600 w-full hover:bg-red-700" onClick={handleRadioClick}>
-                    Get Radiologist Report
+                    {showText ? 'Hide Radiologist Report' : 'Get Radiologist Report'}
                 </Button>
-                {showText && (
-                    <motion.p
-                        className="text-md text-start text-gray-600 mt-4"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.5 }}
-                    >
-                        {displayedText}
-                    </motion.p>
-                )}
+                {showText && <div className="div-h2">
+                    {isAnimationComplete ? (
+                        <motion.div
+                            className="text-md text-start text-gray-600 mt-4 space-y-4"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.5 }}
+                            dangerouslySetInnerHTML={{ __html: cleanedHtml }}
+                        />
+                    ) : (
+                        <motion.div
+                            className="text-md text-start text-gray-600 mt-4 space-y-4"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.5 }}
+                            dangerouslySetInnerHTML={{ __html: displayedText }}
+                        />
+                    )}
+                </div>}
             </div>
 
             <div>
                 <Button className="bg-red-600 w-full hover:bg-red-700" onClick={handleShowImages}>
-                    Show Images
+                    {showImages ? 'Hide Images' : 'Show Images'}
                 </Button>
-                {showImages && (
-                    <div className="grid grid-cols-4 gap-2 mt-4">
-                        {predictData?.frames?.map((img, i) => (
-                            <img
-                                key={i}
-                                src={img}
-                                alt={`Prediction image ${i + 1}`}
-                                width={100}
-                                height={100}
-                                className="cursor-pointer rounded-md border"
-                                onClick={() => setSelectedImage(img)}
-                            />
-                        ))}
-                    </div>
-                )}
+                {showImages && <div className="grid grid-cols-4 gap-2 mt-4">
+                    {predictData?.frames?.map((img, i) => (
+                        <img
+                            key={i}
+                            src={img}
+                            alt={`Prediction image ${i + 1}`}
+                            width={100}
+                            height={100}
+                            className="cursor-pointer rounded-md border"
+                            onClick={() => setSelectedImage(img)}
+                        />
+                    ))}
+                </div>}
             </div>
 
             {selectedImage && (
@@ -113,6 +130,6 @@ export default function ResultSection({ predictData }) {
                     </div>
                 </div>
             )}
-        </div>
+        </div >
     );
 };

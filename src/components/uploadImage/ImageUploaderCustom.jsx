@@ -8,98 +8,97 @@ import { toast } from "sonner";
 import ResultSection from "./ResultSection"
 
 export default function ImageUploaderCustom() {
-    const [image, setImage] = useState(null);
-    const token = Cookies.get("token");
-    const [imageBinary, setImageBinary] = useState(null);
-    const [isUploading, setIsUploading] = useState(false)
-    const [isProcessing, setIsProcessing] = useState(false)
-    const fileInputRef = useRef(null);
-    const [predictData, setPredictData] = useState("");
+    // const [image, setImage] = useState(null);
+    // const token = Cookies.get("token");
+    // const [imageBinary, setImageBinary] = useState(null);
+    // const [isUploading, setIsUploading] = useState(false)
+    // const [isProcessing, setIsProcessing] = useState(false)
+    // const fileInputRef = useRef(null);
 
-    const handleSubmit = async () => {
-        if (!image) return
-        try {
-            setIsProcessing(true);
-            const formData = new FormData();
-            formData.append("file", imageBinary);
-            const response = await fetch(`${basedUrl}predict`, {
-                method: "POST",
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-                body: formData,
-            });
-            const data = await response.json();
-            setPredictData(data);
-            if (response.ok) {
-                toast.success(data?.message || "Predict Successfully");
-            } else {
-                toast.error(data?.error || "Predict failed");
-            }
-            setIsProcessing(false);
-            setImage(null);
-            setImageBinary(null);
-        } catch (err) {
-            console.error("Signup Error:", err);
-            toast.error("Something went wrong");
-            setIsProcessing(false);
-        }
-    }
+    // const handleSubmit = async () => {
+    //     if (!image) return
+    //     try {
+    //         setIsProcessing(true);
+    //         const formData = new FormData();
+    //         formData.append("file", imageBinary);
+    //         const response = await fetch(`${basedUrl}predict`, {
+    //             method: "POST",
+    //             headers: {
+    //                 Authorization: `Bearer ${token}`,
+    //             },
+    //             body: formData,
+    //         });
+    //         const data = await response.json();
+    //         setPredictData(data);
+    //         if (response.ok) {
+    //             toast.success(data?.message || "Predict Successfully");
+    //         } else {
+    //             toast.error(data?.error || "Predict failed");
+    //         }
+    //         setIsProcessing(false);
+    //         setImage(null);
+    //         setImageBinary(null);
+    //     } catch (err) {
+    //         console.error("Signup Error:", err);
+    //         toast.error("Something went wrong");
+    //         setIsProcessing(false);
+    //     }
+    // }
 
-    const handleDrop = (e) => {
-        e.preventDefault();
-        setIsUploading(true);
+    // const handleDrop = (e) => {
+    //     e.preventDefault();
+    //     setIsUploading(true);
 
-        const file = e.dataTransfer.files?.[0];
-        if (!file || !file.name.endsWith(".nii")) {
-            toast("Please upload a .nii file only.");
-            setIsUploading(false);
-            return;
-        }
-        setImageBinary(file);
+    //     const file = e.dataTransfer.files?.[0];
+    //     if (!file || !file.name.endsWith(".nii")) {
+    //         toast("Please upload a .nii file only.");
+    //         setIsUploading(false);
+    //         return;
+    //     }
+    //     setImageBinary(file);
 
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            setImage(event.target?.result);
-            setIsUploading(false);
-        };
-        reader.readAsDataURL(file);
-    };
-
-
-    const handleDragOver = (e) => {
-        e.preventDefault()
-        setIsUploading(true)
-    }
-
-    const handleDragLeave = () => {
-        setIsUploading(false)
-    }
-
-    const handleImageChange = (e) => {
-        const file = e.target.files?.[0];
-        if (!file || !file.name.endsWith(".nii")) {
-            toast("Please upload a .nii file only.");
-            return;
-        }
-        setIsUploading(true);
-        setImageBinary(file);
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            setImage(event.target?.result);
-            setIsUploading(false);
-        };
-        reader.readAsDataURL(file);
-    };
+    //     const reader = new FileReader();
+    //     reader.onload = (event) => {
+    //         setImage(event.target?.result);
+    //         setIsUploading(false);
+    //     };
+    //     reader.readAsDataURL(file);
+    // };
 
 
-    const handleUploadClick = () => {
-        fileInputRef.current?.click()
-    }
+    // const handleDragOver = (e) => {
+    //     e.preventDefault()
+    //     setIsUploading(true)
+    // }
+
+    // const handleDragLeave = () => {
+    //     setIsUploading(false)
+    // }
+
+    // const handleImageChange = (e) => {
+    //     const file = e.target.files?.[0];
+    //     if (!file || !file.name.endsWith(".nii")) {
+    //         toast("Please upload a .nii file only.");
+    //         return;
+    //     }
+    //     setIsUploading(true);
+    //     setImageBinary(file);
+    //     const reader = new FileReader();
+    //     reader.onload = (event) => {
+    //         setImage(event.target?.result);
+    //         setIsUploading(false);
+    //     };
+    //     reader.readAsDataURL(file);
+    // };
+
+
+    // const handleUploadClick = () => {
+    //     fileInputRef.current?.click()
+    // }
 
     return (
         <>
-            {!image ? (
+            {/* // {!image ? (
                 <Card className="mx-auto max-w-md">
                     <CardContent className="p-6">
                         <div
@@ -146,9 +145,10 @@ export default function ImageUploaderCustom() {
                         </Button>
                     </div>
                 </div>
-            )}
+            )} // */}
 
-            {predictData && <ResultSection predictData={predictData} />}
+            <ChunkUpload />
+
         </>
     )
 }
@@ -157,115 +157,147 @@ export default function ImageUploaderCustom() {
 
 
 
-// const ChunkUpload = () => {
-//     const fileInputRef = useRef(null);
-//     const token = Cookies.get("token");
-//     const [isUploading, setIsUploading] = useState(false);
-//     const maxChunkSize = 10 * 1024 * 1024; // 10MB
-//     const [uploadProgress, setUploadProgress] = useState(0);
+const ChunkUpload = () => {
+    const [predictData, setPredictData] = useState("");
+    const fileInputRef = useRef(null);
+    const token = Cookies.get("token");
 
-//     const handleUploadClick = () => {
-//         fileInputRef.current?.click();
-//     };
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [isUploading, setIsUploading] = useState(false);
+    const [dragActive, setDragActive] = useState(false);
 
-//     const handleFileChange = (e) => {
-//         const file = e.target.files?.[0];
-//         if (!file || !file.name.endsWith(".nii")) {
-//             toast.error("Please upload a .nii file only.");
-//             return;
-//         }
-//         uploadFileInChunks(file);
-//     };
+    const maxChunkSize = 10 * 1024 * 1024; // 10MB
 
-//     const uploadFileInChunks = async (file) => {
-//         setIsUploading(true);
-//         setUploadProgress(0);
+    const handleUploadClick = () => {
+        fileInputRef.current?.click();
+    };
 
-//         let start = 0;
-//         let end = maxChunkSize;
+    const handleFileChange = (e) => {
+        const file = e.target.files?.[0];
+        processFile(file);
+    };
 
-//         while (start < file.size) {
-//             const chunk = file.slice(start, end);
-//             const formData = new FormData();
-//             const isLastChunk = end >= file.size ? 1 : 0;
-//             formData.append("file", chunk);
+    const processFile = (file) => {
+        if (!file || !file.name.endsWith(".nii")) {
+            toast.error("Please upload a .nii file only.");
+            return;
+        }
+        setSelectedFile(file);
+        toast.success("File selected. Now click Submit to upload.");
+    };
 
-//             try {
-//                 const response = await fetch(`${basedUrl}predict`, {
-//                     method: "POST",
-//                     headers: {
-//                         Authorization: `Bearer ${token}`,
-//                     },
-//                     body: formData,
-//                 });
-//                 if (!response.ok) {
-//                     throw new Error("Chunk upload failed");
-//                 }
+    const handleDrop = (e) => {
+        e.preventDefault();
+        setDragActive(false);
+        const file = e.dataTransfer.files?.[0];
+        processFile(file);
+    };
 
-//                 const data = await response.json();
-//                 const uploadedChunk = end > file.size ? file.size : end;
-//                 const percent = Math.round((uploadedChunk / file.size) * 100);
-//                 setUploadProgress(percent);
+    const uploadFileInChunks = async (file) => {
+        setIsUploading(true);
+        let start = 0;
+        let end = maxChunkSize;
 
-//                 if (isLastChunk) {
-//                     toast.success(data.data || "Upload complete");
-//                 }
+        while (start < file.size) {
+            const chunk = file.slice(start, end);
+            const formData = new FormData();
+            const isLastChunk = end >= file.size ? 1 : 0;
+            formData.append("file", chunk, file?.name);
 
-//                 start = end + 1;
-//                 end = start + maxChunkSize;
-//             } catch (error) {
-//                 toast.error("Upload failed. Please try again.");
-//                 console.error(error);
-//                 break;
-//             }
-//         }
-//         setIsUploading(false);
-//     };
+            try {
+                const response = await fetch(`${basedUrl}predict`, {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: formData,
+                });
 
-//     return (
-//         <div className="max-w-md mx-auto p-4 border rounded-lg">
-//             <input
-//                 ref={fileInputRef}
-//                 type="file"
-//                 accept=".nii"
-//                 className="hidden"
-//                 onChange={handleFileChange}
-//             />
-//             <div
-//                 className={`border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center transition-colors ${isUploading ? "border-red-500 bg-red-50" : "border-gray-300"}`}
-//             >
-//                 <Upload className="h-10 w-10 text-red-500 mb-2 animate-bounce" />
-//                 <p className="text-sm text-gray-600 mb-2">
-//                     Drag and drop your CT here, or click to select
-//                 </p>
-//                 <Button
-//                     className="bg-red-600 hover:bg-red-700"
-//                     type="button"
-//                     onClick={handleUploadClick}
-//                     disabled={isUploading}
-//                 >
-//                     {isUploading ? (
-//                         <Loader className="animate-spin w-5 h-5" />
-//                     ) : (
-//                         <>
-//                             <Upload className="mr-2 h-4 w-4" />
-//                             Upload File
-//                         </>
-//                     )}
-//                 </Button>
-//                 {isUploading && (
-//                     <div className="w-full mt-4">
-//                         <div className="w-full bg-gray-200 rounded-full h-3">
-//                             <div
-//                                 className="bg-red-500 h-3 rounded-full transition-all"
-//                                 style={{ width: `${uploadProgress}%` }}
-//                             ></div>
-//                         </div>
-//                         <p className="text-sm mt-1 text-center">{uploadProgress}%</p>
-//                     </div>
-//                 )}
-//             </div>
-//         </div>
-//     );
-// };
+                if (!response.ok) throw new Error("Chunk upload failed");
+
+                const data = await response.json();
+                console.log(data, "data");
+                setPredictData(data);
+                if (isLastChunk) {
+                    toast.success(data.data || "Upload complete");
+                }
+
+                start = end + 1;
+                end = start + maxChunkSize;
+            } catch (error) {
+                toast.error("Upload failed. Please try again.");
+                console.error(error);
+                break;
+            }
+        }
+
+        setIsUploading(false);
+    };
+
+    const handleSubmit = async () => {
+        if (!selectedFile) return;
+        await uploadFileInChunks(selectedFile);
+    };
+
+
+    return (
+        <>
+            <div className="max-w-md mx-auto p-4 border rounded-lg">
+                <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".nii"
+                    className="hidden"
+                    onChange={handleFileChange}
+                />
+
+                <div
+                    onClick={handleUploadClick}
+                    onDrop={handleDrop}
+                    onDragOver={(e) => {
+                        e.preventDefault();
+                        setDragActive(true);
+                    }}
+                    onDragLeave={() => setDragActive(false)}
+                    className={`border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center transition-colors cursor-pointer ${isUploading
+                        ? "border-red-500 bg-red-50"
+                        : dragActive
+                            ? "border-red-600 bg-red-100"
+                            : "border-gray-300"
+                        }`}
+                >
+                    <Upload className="h-10 w-10 text-red-500 mb-2 animate-bounce" />
+                    <p className="text-sm text-gray-600 mb-2 text-center">
+                        Drag & drop your CT file here, or click to select
+                    </p>
+                    <Button
+                        className="bg-red-600 hover:bg-red-700"
+                        type="button"
+                        disabled={isUploading}
+                    >
+                        <Upload className="mr-2 h-4 w-4" />
+                        Upload File
+                    </Button>
+                </div>
+
+                <div className="space-y-4 mt-4 w-full">
+                    <div className="flex gap-2 justify-center">
+                        <Button
+                            className="bg-red-600 hover:bg-red-700 w-full"
+                            onClick={handleSubmit}
+                            disabled={!selectedFile || isUploading}
+                        >
+                            {isUploading ? (
+                                <Loader className="animate-spin w-5 h-5" />
+                            ) : (
+                                "Submit for Upload"
+                            )}
+                        </Button>
+                    </div>
+                </div>
+            </div>
+            {predictData && <ResultSection predictData={predictData} setPredictData={setPredictData} />}
+        </>
+    );
+};
 
