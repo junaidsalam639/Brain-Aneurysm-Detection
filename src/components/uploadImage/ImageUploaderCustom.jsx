@@ -54,7 +54,7 @@ export default function ImageUploaderCustom() {
             formData.append("file", chunk, file?.name);
 
             try {
-                const response = await fetch(`${basedUrl}predict`, {
+                const response = await fetch(`${basedUrl}upload`, {
                     method: "POST",
                     headers: {
                         Authorization: `Bearer ${token}`,
