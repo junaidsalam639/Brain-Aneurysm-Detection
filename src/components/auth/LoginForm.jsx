@@ -36,7 +36,7 @@ export default function LoginForm() {
         if (response.ok) {
           Cookies.set('token', data?.token, { expires: 7 })
           toast.success(data?.message || "Login Successfully");
-          navigate("/");
+          navigate("/dashboard");
         } else {
           toast.error(data?.error || "Login failed");
         }

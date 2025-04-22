@@ -1,8 +1,10 @@
 import { ArrowRight } from "lucide-react"
 import { Button } from "../ui/Button"
 import { Link } from "react-router"
+import Cookies from 'js-cookie'
 
 export default function HomeHeroSection() {
+    const token = Cookies.get("token");
     return (
         <>
 
@@ -21,7 +23,7 @@ export default function HomeHeroSection() {
                                 medical imaging with high accuracy.
                             </p>
                             <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                                <Link to="/login">
+                                <Link to={token ? "/dashboard" : "/login"}>
                                     <Button className="bg-red-600 hover:bg-red-700 md:w-40 w-full">
                                         Upload File <ArrowRight className="ml-2 h-4 w-4" />
                                     </Button>

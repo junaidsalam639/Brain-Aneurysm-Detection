@@ -134,17 +134,20 @@ export default function SignupForm() {
                 <p className="text-sm text-red-600">{formik.errors.confirmPassword}</p>
               )}
             </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox
+            <div className="flex gap-2">
+              <input
                 id="terms"
-                name="terms"
+                type="checkbox"
                 checked={formik.values.terms}
-                onChange={formik.handleChange}
+                onChange={(checked) => {
+                  formik.setFieldValue("terms", checked.target.checked)
+                }}
                 onBlur={formik.handleBlur}
+                className="accent-red-600"
               />
               <label
                 htmlFor="terms"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                className="text-sm font-medium leading-none"
               >
                 I agree to the{" "}
                 <Link href="#" className="text-red-600 hover:underline">
@@ -156,6 +159,7 @@ export default function SignupForm() {
                 </Link>
               </label>
             </div>
+
             {formik.touched.terms && formik.errors.terms && (
               <p className="text-sm text-red-600">{formik.errors.terms}</p>
             )}

@@ -21,6 +21,9 @@ export default function Header() {
             const formData = new FormData();
             const response = await fetch(`${basedUrl}logout`, {
                 method: "POST",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
                 body: formData,
             });
             const data = await response.json();
@@ -28,7 +31,7 @@ export default function Header() {
                 Cookies.remove('token');
                 toast.success("Logout Successfully");
                 setTimeout(() => {
-                    window.location.reload();
+                    window.location.href = "/login";
                 }, 1000);
             } else {
                 toast.error(data?.error || "Logout failed");
