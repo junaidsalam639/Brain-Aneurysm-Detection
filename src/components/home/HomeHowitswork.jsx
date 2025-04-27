@@ -9,7 +9,7 @@ export default function HomeHowitswork() {
                         <div className="space-y-2">
                             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl text-red-600">How It Works</h2>
                             <p className="max-w-[700px] text-gray-700 md:text-xl">
-                                Our advanced AI system analyzes Brain CT to detect potential aneurysms with high accuracy.
+                                Our advanced AI system analyzes Head CT's to detect potential brain aneurysms with high accuracy.
                             </p>
                         </div>
                     </div>
@@ -19,7 +19,7 @@ export default function HomeHowitswork() {
                                 <Upload className="h-10 w-10" />
                             </div>
                             <h3 className="text-lg font-bold text-red-600">Upload</h3>
-                            <p className="text-sm text-gray-600">Upload your brain CT securely to our platform.</p>
+                            <p className="text-sm text-gray-600">Upload your Head CT securely to our platform.</p>
                         </div>
                         <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-all hover:shadow-md animate-fadeInUp animation-delay-200">
                             <div className="mb-4 text-red-600 flex justify-center">
@@ -41,7 +41,7 @@ export default function HomeHowitswork() {
                                 </svg>
                             </div>
                             <h3 className="text-lg font-bold text-red-600">Process</h3>
-                            <p className="text-sm text-gray-600">Our AI analyzes the Brain CT using advanced algorithms.</p>
+                            <p className="text-sm text-gray-600">Our AI analyzes the Head CT using advanced algorithms.</p>
                         </div>
                         <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-all hover:shadow-md animate-fadeInUp animation-delay-400">
                             <div className="mb-4 text-red-600 flex justify-center">

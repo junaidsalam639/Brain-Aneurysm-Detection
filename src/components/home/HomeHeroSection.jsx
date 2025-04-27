@@ -16,7 +16,7 @@ export default function HomeHeroSection() {
                                 Medical Imaging Analysis
                             </div>
                             <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-red-600">
-                                Brain Aneurysms Detection
+                                Brain Aneurysm Detection
                             </h1>
                             <p className="text-gray-700 md:text-xl">
                                 Early detection saves lives. Our advanced AI system helps identify potential brain aneurysms from

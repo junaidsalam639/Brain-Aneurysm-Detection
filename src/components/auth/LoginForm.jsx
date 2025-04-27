@@ -50,7 +50,7 @@ export default function LoginForm() {
   });
 
   return (
-    <main className="flex-1 flex items-center justify-center py-12 px-4 md:px-6">
+    <main className="flex-1 flex items-center justify-center py-12 px-4 md:px-6 min-h-screen">
       <Card className="w-full max-w-md animate-fadeIn">
         <form onSubmit={formik.handleSubmit}>
           <CardHeader className="space-y-1">
