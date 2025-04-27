@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useState, useRef } from "react"
 import Cookies from 'js-cookie'
 import { Loader, Upload } from "lucide-react"
@@ -15,8 +14,6 @@ export default function ImageUploaderCustom() {
     const [selectedFile, setSelectedFile] = useState('');
     const [isUploading, setIsUploading] = useState(false);
     const [dragActive, setDragActive] = useState(false);
-
-    const maxChunkSize = 10 * 1024 * 1024; // 10MB
 
     const handleUploadClick = () => {
         fileInputRef.current?.click();
@@ -43,47 +40,6 @@ export default function ImageUploaderCustom() {
         processFile(file);
     };
 
-    // const uploadFileInChunks = async (file) => {
-    // setIsUploading(true);
-    // let start = 0;
-    // let end = maxChunkSize;
-
-    // while (start < file.size) {
-    //     const chunk = file.slice(start, end);
-    //     const formData = new FormData();
-    //     const isLastChunk = end >= file.size ? 1 : 0;
-    //     formData.append("file", chunk, file?.name);
-
-    //     try {
-    //         const response = await fetch(`${basedUrl}upload`, {
-    //             method: "POST",
-    //             headers: {
-    //                 Authorization: `Bearer ${token}`,
-    //             },
-    //             body: formData,
-    //         });
-
-    //         if (!response.ok) throw new Error("Chunk upload failed");
-
-    //         const data = await response.json();
-    //         console.log(data, "data");
-    //         setPredictData(data);
-    //         if (isLastChunk) {
-    //             toast.success(data.data || "Upload complete");
-    //             fileInputRef.current.value = null;
-    //             setSelectedFile('');
-    //         }
-    //         start = end + 1;
-    //         end = start + maxChunkSize;
-    //     } catch (error) {
-    //         toast.error("Upload failed. Please try again.");
-    //         console.error(error);
-    //         break;
-    //     }
-    // }
-    // setIsUploading(false);
-    // };
-
 
     const uploadFileInChunks = async (file) => {
         setIsUploading(true);
@@ -104,15 +60,13 @@ export default function ImageUploaderCustom() {
             setPredictData(data);
             toast.success(data?.data || "Upload complete");
             setSelectedFile('');
+            fileInputRef.current.value = null;
         } catch (error) {
             toast.error("Upload failed. Please try again.");
             console.error(error);
         }
         setIsUploading(false);
     };
-
-
-
 
 
     const handleSubmit = async () => {
